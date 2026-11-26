@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scene6</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            color: #fff3d4;
+            font-family: "Noto Sans Thai", Kanit, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .frame {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+
+        .imgstory {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            animation: bounce-in 950ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        .img1 {
+            animation-delay: 1s;
+        }
+
+        .img2 {
+            animation-delay: 3s;
+        }
+
+        .img3 {
+            animation-delay: 5s;
+        }
+
+        .img4 {
+            animation-delay: 7s;
+        }
+
+        .img5 {
+            animation-delay: 9s;
+        }
+
+        .img6 {
+            animation-delay: 11s;
+        }
+
+        .img7 {
+            animation-delay: 13s;
+        }
+
+        .img8 {
+            animation-delay: 15s;
+        }
+
+        .story-popup[hidden] {
+            display: none;
+        }
+
+        .story-popup {
+            box-sizing: border-box;
+            position: fixed;
+            z-index: 5;
+            left: 50%;
+            bottom: 4%;
+            width: min(90vw, 1150px);
+            max-height: 52vh;
+            overflow-y: auto;
+            padding: 22px 30px;
+            border: 2px solid #d6ad61;
+            border-radius: 16px;
+            color: #fff3d4;
+            background:
+                radial-gradient(ellipse at top, rgba(142, 96, 43, 0.42), transparent 70%),
+                linear-gradient(145deg, rgba(43, 29, 19, 0.97), rgba(17, 14, 12, 0.97));
+            box-shadow: 0 0 0 4px rgba(50, 34, 20, 0.82), 0 0 28px rgba(255, 202, 105, 0.4);
+            backdrop-filter: blur(6px);
+            transform: translateX(-50%);
+            animation: popup-in 500ms ease-out both;
+        }
+
+        .story-popup p {
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .story-popup p + p {
+            margin-top: 8px;
+        }
+
+        .continue-prompt {
+            display: block;
+            width: fit-content;
+            margin: 16px auto 0;
+            color: #f5d17f;
+            font-weight: 700;
+            text-decoration: none;
+            animation: prompt-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        .continue-prompt:focus-visible {
+            outline: 2px solid #ffe08e;
+            outline-offset: 5px;
+        }
+
+        @keyframes popup-in {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 14px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes prompt-glow {
+            from {
+                text-shadow: 0 0 4px rgba(245, 209, 127, 0.3);
+            }
+            to {
+                text-shadow: 0 0 14px rgba(245, 209, 127, 0.9);
+            }
+        }
+
+        @keyframes bounce-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(0.82);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(18px) scale(1.04);
+            }
+            82% {
+                transform: translateY(-8px) scale(0.99);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .story-popup {
+                width: 92vw;
+                max-height: 58vh;
+                padding: 16px 18px;
+            }
+
+            .story-popup p {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="story">
+        <img class="frame" src="background/06_Player_Fall/Frame.png" alt="">
+        <img class="imgstory img1" src="background/06_Player_Fall/1.png" alt="">
+        <img class="imgstory img2" src="background/06_Player_Fall/2.png" alt="">
+        <img class="imgstory img3" src="background/06_Player_Fall/3.png" alt="">
+        <img class="imgstory img4" src="background/06_Player_Fall/4.png" alt="">
+        <img class="imgstory img5" src="background/06_Player_Fall/5.png" alt="">
+        <img class="imgstory img6" src="background/06_Player_Fall/6.png" alt="">
+        <img class="imgstory img7" src="background/06_Player_Fall/7.png" alt="">
+        <img class="imgstory img8" src="background/06_Player_Fall/8.png" alt="">
+    </div>
+    <section class="story-popup" id="storyPopup" role="dialog" aria-label="เรื่องราวหลังตกจากสะพาน" aria-live="polite" hidden>
+        <p>ผู้กล้า Light Press, Fire, Blues ตกลงจากสะพานต่างคนต่างกระเด็นไปคนละทิศละทาง</p>
+        <p>ผู้กล้าเดินตามทางน้ำมา ยิ่งเดินไกล ก็ยิ่งกลัว ผู้เล่นทั้งรู้สึกตกใจ กลัว กังวล เป็นห่วงเพื่อน ผู้เล่นเดินจน Light ผู้เล่นก็โล่งใจและพยายามจะเร่งให้ Light ไปพร้อมกับตัวเอง</p>
+        <p>Light ห้ามผู้กล้าไว้ พร้อมบอกว่ายิ่งเร่ง ยิ่งแย่นะ ค่อยกลับมาดูก่อนว่าตอนนี้เกิดอะไรขึ้นกับเธอบ้างนะ</p>
+        <a class="continue-prompt" href="scene7.html">กดเพื่อดำเนินการต่อ</a>
+    </section>
+    <script>
+        const lastImage = document.querySelector(".img8");
+        const storyPopup = document.getElementById("storyPopup");
+
+        lastImage.addEventListener("animationend", (event) => {
+            if (event.animationName !== "bounce-in") {
+                return;
+            }
+
+            window.setTimeout(() => {
+                storyPopup.hidden = false;
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

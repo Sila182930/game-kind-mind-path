@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .info {
+            width: 100%;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .friends {
+            padding: 0;
+            height: 80%;
+        }
+
+        .friend {
+            top: 0;
+            height: 100%;
+            /* padding-top: 5%; */
+            opacity: 0;
+            animation: bounce-in 950ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        .friend-light {
+            animation-delay: 0s;
+            width: 24.5%;
+        }
+
+        .friend-stress {
+            animation-delay: 5s;
+            width: 24.5%;
+        }
+
+        .friend-fear {
+            animation-delay: 10s;
+            width: 24.5%;
+        }
+
+        .friend-blues {
+            animation-delay: 15s;
+            width: 24.5%;
+        }
+
+        @keyframes bounce-in {
+            0% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(0.82);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(18px) scale(1.04);
+            }
+            82% {
+                transform: translateY(-8px) scale(0.99);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .story-panel[hidden] {
+            display: none;
+        }
+
+        .story-panel {
+            box-sizing: border-box;
+            position: fixed;
+            z-index: 5;
+            left: 50%;
+            bottom: 2.5%;
+            width: min(88vw, 1050px);
+            max-height: 30vh;
+            overflow-y: auto;
+            padding: 18px 28px;
+            border: 2px solid #d6ad61;
+            border-radius: 16px;
+            color: #fff3d4;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at top, rgba(142, 96, 43, 0.42), transparent 70%),
+                linear-gradient(145deg, rgba(43, 29, 19, 0.96), rgba(17, 14, 12, 0.96));
+            box-shadow: 0 0 0 4px rgba(50, 34, 20, 0.82), 0 0 28px rgba(255, 202, 105, 0.36);
+            backdrop-filter: blur(6px);
+            transform: translateX(-50%);
+        }
+
+        .story-panel h2 {
+            margin-bottom: 6px;
+            color: #f5d17f;
+            font: 700 22px/1.35 Georgia, "Noto Sans Thai", serif;
+        }
+
+        .story-panel p {
+            font: 16px/1.65 "Noto Sans Thai", Kanit, sans-serif;
+        }
+
+        @media (max-width: 700px) {
+            .story-panel {
+                width: 92vw;
+                max-height: 34vh;
+                padding: 14px 18px;
+            }
+
+            .story-panel h2 {
+                font-size: 19px;
+            }
+
+            .story-panel p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img class="bg" src="background/03_Meeting_friend/BG.jpg" alt="Scene 3">
+    <div class="info" id="friends">
+    <img class="friend friend-light" src="background/03_Meeting_friend/Light.png" alt="Light" data-name="Light">
+    <img class="friend friend-stress" src="background/03_Meeting_friend/Stress.png" alt="Stress" data-name="Stress">
+    <img class="friend friend-fear" src="background/03_Meeting_friend/Fear.png" alt="Fear" data-name="Fear">
+    <img class="friend friend-blues" src="background/03_Meeting_friend/Blues.png" alt="Blues" data-name="Blues">
+    </div>
+    <section class="story-panel" id="storyPanel" aria-live="polite" hidden>
+        <h2 id="storyTitle">เพื่อนร่วมทาง</h2>
+        <p id="storyText"></p>
+    </section>
+    <script>
+        const friends = Array.from(document.querySelectorAll(".friend"));
+        const storyPanel = document.getElementById("storyPanel");
+        const storyTitle = document.getElementById("storyTitle");
+        const storyText = document.getElementById("storyText");
+        const descriptions = {
+            Light: "เพื่อนร่วมทางที่ช่วยให้มีนิสัยสงบ ช่างสังเกต และใส่ใจสิ่งที่เกิดขึ้นรอบตัว ไม่รีบร้อนตัดสินว่าความคิดหรือความรู้สึกใดดีหรือไม่ดี สามารถรับรู้ความเปลี่ยนแปลงของร่างกายและจิตใจโดยไม่ตื่นตระหนก เมื่อเผชิญปัญหามักหยุดสังเกตสิ่งที่เกิดขึ้นก่อนเลือกว่าจะตอบสนองอย่างไร",
+            Stress: "เพื่อนร่วมทางที่มีนิสัยเร่งรีบ รู้สึกกดดันและต้องตื่นตัวอยู่ตลอดเวลา ร่างกายตึงเครียด เหนื่อยล้าง่าย และมักหยุดคิดถึงเรื่องที่ค้างคาใจไม่ได้",
+            Fear: "เพื่อนร่วมทางที่มีนิสัยขี้กังวลและระแวดระวังสิ่งรอบตัว มักคิดถึงเหตุการณ์ร้ายที่อาจเกิดขึ้น รู้สึกไม่มั่นใจเมื่อต้องเผชิญความไม่แน่นอน หัวใจเต้นเร็ว และกระวนกระวายจนอยู่นิ่งได้ยาก",
+            Blues: "เพื่อนร่วมทางที่มีนิสัยเงียบขรึมและเก็บตัว รู้สึกเศร้าหมอง อ่อนล้า และไม่ค่อยมีแรงทำอะไร สิ่งที่เคยสนุกกลับไม่น่าสนใจเหมือนเดิม มักคิดถึงเรื่องที่ผิดหวังหรือสูญเสีย และอยากอยู่ตามลำพัง"
+        };
+
+        friends.forEach((friend) => {
+            friend.addEventListener("animationstart", (event) => {
+                if (event.animationName !== "bounce-in") {
+                    return;
+                }
+
+                storyTitle.textContent = friend.dataset.name;
+                storyText.textContent = descriptions[friend.dataset.name];
+                storyPanel.hidden = false;
+
+                if (friend.classList.contains("friend-blues")) {
+                    window.setTimeout(() => {
+                        window.location.href = `scene4.html${window.location.search}`;
+                    }, 7000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            color: #fff3d4;
+            font-family: "Noto Sans Thai", Kanit, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+
+        .bg.fade-out {
+            opacity: 0;
+        }
+
+        .story-panel[hidden] {
+            display: none;
+        }
+
+        .story-panel {
+            box-sizing: border-box;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 5%;
+            width: min(90vw, 1100px);
+            max-height: 42vh;
+            overflow-y: auto;
+            padding: 22px 30px;
+            border: 2px solid #d6ad61;
+            border-radius: 16px;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at top, rgba(142, 96, 43, 0.42), transparent 70%),
+                linear-gradient(145deg, rgba(43, 29, 19, 0.96), rgba(17, 14, 12, 0.96));
+            box-shadow: 0 0 0 4px rgba(50, 34, 20, 0.82), 0 0 28px rgba(255, 202, 105, 0.36);
+            backdrop-filter: blur(6px);
+            transform: translateX(-50%);
+        }
+
+        .story-panel p {
+            font-size: 19px;
+            line-height: 1.8;
+        }
+
+        .final-panel {
+            animation: reveal-panel 700ms ease-out both;
+        }
+
+        .final-panel #finalText {
+            white-space: pre-line;
+        }
+
+        .continue-prompt {
+            margin-top: 16px;
+            color: #f5d17f;
+            font-weight: 700;
+            animation: prompt-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes reveal-panel {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 14px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes prompt-glow {
+            from {
+                text-shadow: 0 0 4px rgba(245, 209, 127, 0.3);
+            }
+            to {
+                text-shadow: 0 0 14px rgba(245, 209, 127, 0.9);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .story-panel {
+                width: 92vw;
+                max-height: 48vh;
+                padding: 16px 18px;
+            }
+
+            .story-panel p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img class="bg" id="background" src="background/04_Start_Adventure/BG.jpg" alt="">
+    <section class="story-panel" id="introPanel" aria-live="polite">
+        <p id="introText"></p>
+    </section>
+    <section class="story-panel final-panel" id="finalPanel" aria-live="polite" hidden>
+        <p id="finalText"></p>
+        <a href="scene5.html"><p class="continue-prompt">กดเพื่อดำเนินการต่อ</p></a>
+    </section>
+    <script>
+        const queryName = new URLSearchParams(window.location.search).get("playerName");
+        const playerName = queryName && queryName.trim() ? queryName.trim() : "ผู้กล้า";
+        const background = document.getElementById("background");
+        const introPanel = document.getElementById("introPanel");
+        const finalPanel = document.getElementById("finalPanel");
+
+        document.getElementById("introText").textContent =
+            `${playerName} และทีมได้รับภารกิจให้เดินทางไปสู่ดินแดนแห่งความสุข เพื่อตามหาหัวใจแห่งความสุข`;
+        document.getElementById("finalText").textContent =
+            `Light, Stress, Fear และ Blues คือเพื่อนร่วมทางของ ${playerName} ในภารกิจตามหา หัวใจแห่งความสุข\nแต่ละคนมีนิสัยและมุมมองที่แตกต่างกัน ตลอดการผจญภัย เพื่อนแต่ละคนอาจเสียสมดุลเมื่อต้องเผชิญกับบททดสอบ หน้าที่ของผู้กล้าไม่ใช่การกำจัดหรือทอดทิ้งพวกเขา แต่คือการเรียนรู้ว่าจะอยู่ร่วมกันอย่างไร จนค้นหัวใจแห่งความสุข`;
+
+        window.setTimeout(() => {
+            background.classList.add("fade-out");
+        }, 5000);
+
+        background.addEventListener("transitionend", (event) => {
+            if (event.propertyName !== "opacity") {
+                return;
+            }
+
+            introPanel.hidden = true;
+            finalPanel.hidden = false;
+        });
+    </script>
+</body>
+</html>

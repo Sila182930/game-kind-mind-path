@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            color: #fff3d4;
+            font-family: "Noto Sans Thai", Kanit, sans-serif;
+        }
+
+        .background-link {
+            position: fixed;
+            z-index: 0;
+            inset: 0;
+        }
+
+        .background-link img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-panel {
+            box-sizing: border-box;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 4%;
+            width: min(90vw, 1150px);
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 22px 30px;
+            border: 2px solid #d6ad61;
+            border-radius: 16px;
+            color: #fff3d4;
+            background:
+                radial-gradient(ellipse at top, rgba(142, 96, 43, 0.42), transparent 70%),
+                linear-gradient(145deg, rgba(43, 29, 19, 0.97), rgba(17, 14, 12, 0.97));
+            box-shadow: 0 0 0 4px rgba(50, 34, 20, 0.82), 0 0 28px rgba(255, 202, 105, 0.4);
+            transform: translateX(-50%);
+            animation: panel-in 500ms ease-out both;
+        }
+
+        .text_c1 {
+            margin: 0;
+            text-align: center;
+            font-size: 19px;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: #e4c477;
+            font-weight: bold;
+            font-size: 1.15em;
+        }
+
+        .highlight1 {
+            color: #fff1b5;
+            font-weight: bold;
+            font-size: 1.35em;
+        }
+
+        .continue-prompt {
+            display: block;
+            width: fit-content;
+            margin: 16px auto 0;
+            color: #f5d17f;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            animation: prompt-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        .continue-prompt:hover {
+            color: #fff0b5;
+        }
+
+        .continue-prompt:focus-visible {
+            outline: 2px solid #ffe08e;
+            outline-offset: 5px;
+        }
+
+        @keyframes panel-in {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 14px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes prompt-glow {
+            from {
+                text-shadow: 0 0 4px rgba(245, 209, 127, 0.3);
+            }
+            to {
+                text-shadow: 0 0 14px rgba(245, 209, 127, 0.9);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .story-panel {
+                width: 92vw;
+                max-height: 88vh;
+                padding: 16px 18px;
+            }
+
+            .text_c1 {
+                font-size: 16px;
+                line-height: 1.7;
+            }
+
+            .highlight {
+                font-size: 1.1em;
+            }
+
+            .highlight1 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="background-link" href="scene2.html" aria-label="เริ่มการเดินทาง">
+        <img src="background/01_Start/BG.jpg" alt="ฉากเปิดเรื่อง">
+    </a>
+    <section class="story-panel">
+        <p class="text_c1">มีเรื่องเล่าว่ามีผู้กล้าคนหนึ่งกับเพื่อนร่วมทาง 4 คน<br> <span class="highlight">stress</span> <span class="highlight">fear</span> <span class="highlight">blues</span> และ <span class="highlight">Light</span><br>
+            คณะเดินทางนี้ต้องเดินทางเพื่อไปสู่ดินแดนแห่งความสุข หรือ happy land<br>เพื่อตามหา<span class="highlight">หัวใจแห่งความสุข</span> หรือ <span class="highlight">happy heart</span><br>
+            แต่ระหว่างทางผู้กล้ากับเพื่อนทั้ง 4 คนกลับต้องเผชิญกับบททดสอบและอุปสรรคมากมาย<br> ผู้กล้าจะตามหาหัวใจแห่งความสุข
+            และปกป้องเพื่อนทั้ง 4 ได้หรือไม่<br><span class="highlight1">มีเพียงคุณเท่านั้นที่เป็นผู้ตัดสิน</span></p>
+        <a class="continue-prompt" href="scene2.html">คลิกเพื่อเริ่มต้นการเดินทาง</a>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            color: #fff3d4;
+            font-family: "Noto Sans Thai", Kanit, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+            opacity: 1;
+            transition: opacity 2s ease;
+        }
+
+        .story-panel {
+            box-sizing: border-box;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 5%;
+            width: min(90vw, 1100px);
+            padding: 22px 30px;
+            border: 2px solid #d6ad61;
+            border-radius: 16px;
+            color: #fff3d4;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at top, rgba(142, 96, 43, 0.42), transparent 70%),
+                linear-gradient(145deg, rgba(43, 29, 19, 0.96), rgba(17, 14, 12, 0.96));
+            box-shadow: 0 0 0 4px rgba(50, 34, 20, 0.82), 0 0 28px rgba(255, 202, 105, 0.36);
+            backdrop-filter: blur(6px);
+            transform: translateX(-50%);
+        }
+
+        .story-panel p {
+            font-size: 19px;
+            line-height: 1.8;
+        }
+
+        .continue-prompt {
+            display: inline-block;
+            margin-top: 16px;
+            color: #f5d17f;
+            font-weight: 700;
+            animation: prompt-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        .continue-prompt:focus-visible {
+            outline: 2px solid #ffe08e;
+            outline-offset: 5px;
+        }
+
+        @keyframes prompt-glow {
+            from {
+                text-shadow: 0 0 4px rgba(245, 209, 127, 0.3);
+            }
+            to {
+                text-shadow: 0 0 14px rgba(245, 209, 127, 0.9);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .story-panel {
+                width: 92vw;
+                padding: 16px 18px;
+            }
+
+            .story-panel p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img class="bg" src="background/05_Sapan_Break/BG.jpg" alt="">
+    <section class="story-panel" aria-live="polite">
+        <p>ระหว่างเดินทางข้ามสะพาน สะพานก็เกิดถล่มลงอย่างกะทันหัน</p>
+        <a class="continue-prompt" href="scene6.html">กดเพื่อดำเนินการต่อ</a>
+    </section>
+</body>
+</html>

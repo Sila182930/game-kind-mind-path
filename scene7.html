@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scene7</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            color: #fff3d4;
+            font-family: "Noto Sans Thai", Kanit, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .bg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .took {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            filter: drop-shadow(0 0 0 rgba(255, 202, 75, 0));
+            transition: opacity 1.5s ease, filter 1.5s ease;
+        }
+
+        .took.revealed {
+            opacity: 1;
+            filter: drop-shadow(0 0 20px rgba(255, 202, 75, 0.95));
+        }
+
+        .img_minigame {
+            position: absolute;
+            z-index: 1;
+        }
+
+        .sapan {
+            top: 30%;
+            left: 2%;
+            width: 25%;
+            height: auto;
+            cursor: pointer;
+            transition: filter 180ms ease;
+        }
+
+        .sapan:hover,
+        .sapan:focus-visible {
+            filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 16px #fff);
+        }
+
+        .choice {
+            top: 30%;
+            left: 30%;
+            width: 70%;
+            height: auto;
+            position: absolute;
+        }
+
+        .choice[hidden] {
+            display: none;
+        }
+
+        .choice.bounce-in {
+            animation: choice-bounce-up 800ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        .minigame {
+            width: 25%;
+            height: auto;
+            padding: 0 10px;
+            transition: filter 180ms ease;
+        }
+
+        .minigame:hover,
+        .minigame:focus-visible {
+            filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 16px #fff);
+        }
+
+        .img1 {
+            cursor: pointer;
+            transition: opacity 1s ease, filter 180ms ease;
+        }
+
+        .img1.selected {
+            animation: shake-gold 1s ease-in-out both;
+        }
+
+        .img1.fading {
+            opacity: 0;
+            filter: drop-shadow(0 0 16px #ffd45c);
+            pointer-events: none;
+        }
+
+        .img1:focus-visible {
+            outline: 2px solid #ffe08e;
+            outline-offset: -4px;
+        }
+
+        .choice.interaction-locked .minigame {
+            pointer-events: none;
+        }
+
+        .screen-fade {
+            position: fixed;
+            z-index: 4;
+            inset: 0;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+        }
+
+        .screen-fade.visible {
+            opacity: 1;
+        }
+
+        .light-character[hidden],
+        .narration[hidden] {
+            display: none;
+        }
+
+        .light-character {
+            position: fixed;
+            z-index: 5;
+            left: 50%;
+            bottom: 0;
+            height: min(85vh, 780px);
+            max-width: 80vw;
+            width: auto;
+            object-fit: contain;
+            opacity: 0;
+            pointer-events: none;
+            filter: drop-shadow(0 0 22px rgba(255, 202, 75, 0.8));
+            transform: translate(-50%, 20px);
+            transition: opacity 700ms ease, transform 700ms ease;
+        }
+
+        .light-character.visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .narration {
+            box-sizing: border-box;
+            position: fixed;
+            z-index: 6;
+            left: 50%;
+            bottom: 5%;
+            width: min(90vw, 1100px);
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 22px 30px;
+            border: 2px solid #d6ad61;
+            border-radius: 16px;
+            color: #fff3d4;
+            text-align: left;
+            background:
+                radial-gradient(ellipse at top, rgba(142, 96, 43, 0.42), transparent 70%),
+                linear-gradient(145deg, rgba(43, 29, 19, 0.98), rgba(17, 14, 12, 0.98));
+            box-shadow: 0 0 0 4px rgba(50, 34, 20, 0.82), 0 0 28px rgba(255, 202, 105, 0.4);
+            transform: translateX(-50%);
+            animation: narration-in 600ms ease-out both;
+        }
+
+        .narration p {
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .narration p + p {
+            margin-top: 8px;
+        }
+
+        .narration .fragment-found {
+            color: #f5d17f;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .continue-prompt {
+            display: block;
+            margin-top: 12px;
+            color: #f5d17f;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            animation: prompt-glow 1.5s ease-in-out infinite alternate;
+        }
+
+        .continue-prompt:focus-visible {
+            outline: 2px solid #ffe08e;
+            outline-offset: 5px;
+        }
+
+        @keyframes shake-gold {
+            0%,
+            100% {
+                transform: translateX(0) rotate(0);
+                filter: drop-shadow(0 0 10px #ffd45c) drop-shadow(0 0 22px #ffb82e);
+            }
+            10%,
+            30%,
+            50%,
+            70% {
+                transform: translateX(-16px) rotate(-6deg) scale(1.03);
+            }
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(16px) rotate(6deg) scale(1.03);
+            }
+            90% {
+                transform: translateX(-8px) rotate(-3deg) scale(1.01);
+            }
+        }
+
+        @keyframes choice-bounce-up {
+            0% {
+                opacity: 0;
+                transform: translateY(55px) scale(0.88);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(-12px) scale(1.03);
+            }
+            82% {
+                transform: translateY(5px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes prompt-glow {
+            from {
+                text-shadow: 0 0 4px rgba(245, 209, 127, 0.3);
+            }
+            to {
+                text-shadow: 0 0 14px rgba(245, 209, 127, 0.9);
+            }
+        }
+
+        @keyframes narration-in {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 14px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .narration {
+                width: 92vw;
+                max-height: 78vh;
+                padding: 16px 18px;
+            }
+
+            .narration p {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img class="bg" src="background/07_First_minigame/BG.png" alt="">
+    <img class="img_minigame sapan" src="background/07_First_minigame/Sapan.png" alt="สะพาน กดเพื่อแสดงตัวเลือก" role="button" tabindex="0" aria-expanded="false">
+    <div class="choice" hidden>
+        <img class="minigame img1" src="background/07_First_minigame/1.png" alt="ชิ้นส่วนความเข้าใจ" role="button" tabindex="0" aria-label="เลือกชิ้นส่วนความเข้าใจ">
+        <img class="minigame img2" src="background/07_First_minigame/2.png" alt="">
+        <img class="minigame img3" src="background/07_First_minigame/3.png" alt="">
+    </div>
+    <img class="took" src="background/07_First_minigame/4.png" alt="ชิ้นส่วนความเข้าใจ 1">
+    <div class="screen-fade" id="screenFade"></div>
+    <img class="light-character" id="lightCharacter" src="character/Light.png" alt="Light" hidden>
+    <section class="narration" id="narration" role="dialog" aria-label="คำบรรยาย Light" aria-live="polite" hidden>
+        <p>Light: สิ่งที่เกิดขึ้นจริงคือ สะพานถล่มและทุกคนพลัดออกจากกัน</p>
+        <p>ส่วนเรื่องที่ว่าจะเกิดอะไรต่อไป ใครจะเป็นอันตราย หรือเราจะช่วยทุกคนได้หรือไม่ เป็นสิ่งที่จิตใจอาจคิดเติมต่อจากความเป็นจริงที่เกิดขึ้น การมองโลกตามเป็นจริงจะช่วยให้เรารับมือกับเรื่องต่างๆ ได้ดีมากขึ้น</p>
+        <p class="fragment-found">พบชิ้นส่วนความเข้าใจ 1/5</p>
+        <a class="continue-prompt" href="scene8.html">กดเพื่อดำเนินการต่อ</a>
+    </section>
+    <script>
+        const sapan = document.querySelector(".sapan");
+        const choices = document.querySelector(".choice");
+        const firstChoice = document.querySelector(".img1");
+        const foundFragment = document.querySelector(".took");
+        const screenFade = document.getElementById("screenFade");
+        const lightCharacter = document.getElementById("lightCharacter");
+        const narration = document.getElementById("narration");
+        let sequenceStarted = false;
+
+        function revealChoices() {
+            if (choices.hidden) {
+                choices.hidden = false;
+                choices.classList.add("bounce-in");
+            }
+            sapan.setAttribute("aria-expanded", "true");
+        }
+
+        function finishChoiceFade(event) {
+            if (event.propertyName !== "opacity") {
+                return;
+            }
+
+            firstChoice.removeEventListener("transitionend", finishChoiceFade);
+            foundFragment.classList.add("revealed");
+            window.setTimeout(() => {
+                screenFade.addEventListener("transitionend", (fadeEvent) => {
+                    if (fadeEvent.propertyName === "opacity") {
+                        lightCharacter.hidden = false;
+                        window.requestAnimationFrame(() => {
+                            lightCharacter.classList.add("visible");
+                        });
+                        narration.hidden = false;
+                    }
+                }, { once: true });
+                screenFade.classList.add("visible");
+            }, 5000);
+        }
+
+        function chooseFirstFragment() {
+            if (sequenceStarted) {
+                return;
+            }
+
+            sequenceStarted = true;
+            choices.classList.add("interaction-locked");
+            firstChoice.tabIndex = -1;
+            firstChoice.classList.add("selected");
+
+            window.setTimeout(() => {
+                firstChoice.classList.remove("selected");
+                firstChoice.addEventListener("transitionend", finishChoiceFade);
+                firstChoice.classList.add("fading");
+            }, 1000);
+        }
+
+        sapan.addEventListener("click", revealChoices);
+        sapan.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                revealChoices();
+            }
+        });
+
+        firstChoice.addEventListener("click", chooseFirstFragment);
+        firstChoice.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                chooseFirstFragment();
+            }
+        });
+    </script>
+</body>
+</html>
